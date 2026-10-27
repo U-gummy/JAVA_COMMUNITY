@@ -1,0 +1,30 @@
+package com.study.community.common;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationErrorResponse> handleValidation(MethodArgumentNotValidException e) {
+        // B-1. 필드 에러 목록 꺼내기
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+
+        // B-2. 하나씩 FieldErrorResponse로 바꾸기
+        List<FieldErrorResponse> errors = fieldErrors.stream()
+                .map(error -> new FieldErrorResponse(error.getField(), error.getDefaultMessage()))
+                .toList();
+
+        // B-3. 전체 응답을 만들어 400으로 반환
+        ValidationErrorResponse response = new ValidationErrorResponse("입력값이 올바르지 않습니다.", errors);
+        return ResponseEntity.badRequest().body(response);
+
+    }
+
+}
