@@ -3,6 +3,8 @@ package com.study.community.category;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class CategoryService {
@@ -21,6 +23,12 @@ public class CategoryService {
 
         Category saved = categoryRepository.save(category);
         return CategoryResponse.from(saved);
+    }
+
+    public List<CategoryResponse> list() {
+        return categoryRepository.findAll().stream()
+                .map(CategoryResponse::from)
+                .toList();
     }
 
 }
