@@ -15,6 +15,10 @@ public class CategoryService {
     @Transactional
     public CategoryResponse create(CategoryCreateRequest request) {
         Category category = new Category(request.name());
+        if (categoryRepository.existsByName(request.name())) {
+            throw new DuplicateCategoryNameException(request.name());
+        }
+
         Category saved = categoryRepository.save(category);
         return CategoryResponse.from(saved);
     }
