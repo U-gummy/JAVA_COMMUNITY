@@ -1,5 +1,6 @@
 package com.study.community.common;
 
+import com.study.community.category.CategoryNotFoundException;
 import com.study.community.category.DuplicateCategoryNameException;
 import com.study.community.member.DuplicateEmailException;
 import com.study.community.member.MemberNotFoundException;
@@ -28,6 +29,12 @@ public class GlobalExceptionHandler {
         // B-3. 전체 응답을 만들어 400으로 반환
         ValidationErrorResponse response = new ValidationErrorResponse("입력값이 올바르지 않습니다.", errors);
         return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryNotFound(CategoryNotFoundException e) {
+        ErrorResponse response = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(DuplicateCategoryNameException.class)
