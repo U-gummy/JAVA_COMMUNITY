@@ -9,6 +9,8 @@ import com.study.community.member.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 @Service
 public class PostService {
@@ -41,7 +43,19 @@ public class PostService {
         Post saved = postRepository.save(post);
 
         return PostResponse.from(saved);
+    }
 
+    public List<PostResponse> list() {
+        return postRepository.findAllWithMemberAndCategory().stream()
+                .map(PostResponse::from)
+                .toList();
+    }
+
+
+    public PostResponse detail(Long id) {
+        Post post = postRepository.findByIdWithMemberAndCategory(id)
+                .orElseThrow(() -> new PostNotFoundException(id));
+        return PostResponse.from(post);
     }
 
 }

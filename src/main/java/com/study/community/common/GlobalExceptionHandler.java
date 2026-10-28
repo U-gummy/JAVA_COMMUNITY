@@ -4,6 +4,7 @@ import com.study.community.category.CategoryNotFoundException;
 import com.study.community.category.DuplicateCategoryNameException;
 import com.study.community.member.DuplicateEmailException;
 import com.study.community.member.MemberNotFoundException;
+import com.study.community.post.PostNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -55,4 +56,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePostNotFound(PostNotFoundException e) {
+        ErrorResponse response = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }
