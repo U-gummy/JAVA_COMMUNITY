@@ -77,9 +77,13 @@ public class PostService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        Post post = postRepository.findByIdWithMemberAndCategory(id)
+    public void delete(Long id, Long memberId) {
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFoundException(id));
+
+        if (!memberId.equals(post.getMember().getId())) {
+            throw new PostAccessDeniedException();
+        }
 
         postRepository.delete(post);
     }
