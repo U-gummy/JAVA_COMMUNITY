@@ -1,6 +1,8 @@
 package com.study.community.common;
 
 import com.study.community.category.DuplicateCategoryNameException;
+import com.study.community.member.DuplicateEmailException;
+import com.study.community.member.MemberNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -30,6 +32,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateCategoryNameException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateCategoryName(DuplicateCategoryNameException e) {
+        ErrorResponse response = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleMemberNotFound(MemberNotFoundException e) {
+        ErrorResponse response = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateEmail(DuplicateEmailException e) {
         ErrorResponse response = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
