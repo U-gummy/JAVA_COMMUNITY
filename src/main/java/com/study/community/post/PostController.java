@@ -33,4 +33,20 @@ public class PostController {
         PostResponse response = postService.detail(id);
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PostResponse> update(
+            @PathVariable Long id,
+            @Valid @RequestBody PostUpdateRequest request,
+            @RequestParam Long memberId
+    ) {
+        PostResponse response = postService.update(id, request, memberId);
+        return ResponseEntity.ok().body(response);
+    }
+
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> delete(@PathVariable Long id) {
+//        void response = postService.delete(id);
+//        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//    }
 }

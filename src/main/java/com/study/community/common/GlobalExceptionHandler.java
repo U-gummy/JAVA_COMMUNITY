@@ -4,6 +4,7 @@ import com.study.community.category.CategoryNotFoundException;
 import com.study.community.category.DuplicateCategoryNameException;
 import com.study.community.member.DuplicateEmailException;
 import com.study.community.member.MemberNotFoundException;
+import com.study.community.post.PostAccessDeniedException;
 import com.study.community.post.PostNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,5 +62,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handlePostNotFound(PostNotFoundException e) {
         ErrorResponse response = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(PostAccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handlePostAccessDenied(PostAccessDeniedException e) {
+        ErrorResponse response = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 }

@@ -58,4 +58,30 @@ public class PostService {
         return PostResponse.from(post);
     }
 
+    @Transactional
+    public PostResponse update(Long id, PostUpdateRequest request, Long memberId) {
+
+        Post post = postRepository.findByIdWithMemberAndCategory(id)
+                .orElseThrow(() -> new PostNotFoundException(id));
+
+        if (!memberId.equals(post.getMember().getId())) {
+            throw new PostAccessDeniedException();
+        }
+
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));
+
+        post.update(request.title(), request.content(), category);
+
+        return PostResponse.from(post);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Post post = postRepository.findByIdWithMemberAndCategory(id)
+                .orElseThrow(() -> new PostNotFoundException(id));
+
+        postRepository.delete(post);
+    }
+
 }
