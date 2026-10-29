@@ -7,6 +7,7 @@ import com.study.community.comment.CommentRepository;
 import com.study.community.member.Member;
 import com.study.community.member.MemberNotFoundException;
 import com.study.community.member.MemberRepository;
+import com.study.community.postlike.PostLikeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +20,21 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
     private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
 
 
     public PostService(
             PostRepository postRepository,
             MemberRepository memberRepository,
             CategoryRepository categoryRepository,
-            CommentRepository commentRepository
+            CommentRepository commentRepository,
+            PostLikeRepository postLikeRepository
     ) {
         this.postRepository = postRepository;
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
         this.commentRepository = commentRepository;
+        this.postLikeRepository = postLikeRepository;
     }
 
     @Transactional
@@ -90,6 +94,7 @@ public class PostService {
         }
 
         commentRepository.deleteAllByPostId(id);
+        postLikeRepository.deleteAllByPostId(id);
         postRepository.delete(post);
     }
 

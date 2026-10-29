@@ -49,6 +49,7 @@ public class PostLikeService {
     public void delete(Long postId, Long memberId) {
         PostLike postLike = postLikeRepository.findByPostIdAndMemberId(postId, memberId)
                 .orElseThrow(() -> new PostLikeNotFoundException(postId, memberId));
+
         postLikeRepository.delete(postLike);
     }
 }
