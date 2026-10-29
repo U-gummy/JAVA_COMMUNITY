@@ -3,6 +3,7 @@ package com.study.community.post;
 import com.study.community.category.Category;
 import com.study.community.category.CategoryNotFoundException;
 import com.study.community.category.CategoryRepository;
+import com.study.community.comment.CommentRepository;
 import com.study.community.member.Member;
 import com.study.community.member.MemberNotFoundException;
 import com.study.community.member.MemberRepository;
@@ -17,16 +18,20 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
 
 
     public PostService(
             PostRepository postRepository,
             MemberRepository memberRepository,
-            CategoryRepository categoryRepository
+            CategoryRepository categoryRepository,
+            CommentRepository commentRepository
+
     ) {
         this.postRepository = postRepository;
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Transactional
@@ -85,6 +90,7 @@ public class PostService {
             throw new PostAccessDeniedException();
         }
 
+        commentRepository.deleteAllByPostId(id);
         postRepository.delete(post);
     }
 
