@@ -26,7 +26,6 @@ public class PostService {
             MemberRepository memberRepository,
             CategoryRepository categoryRepository,
             CommentRepository commentRepository
-
     ) {
         this.postRepository = postRepository;
         this.memberRepository = memberRepository;
