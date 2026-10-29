@@ -2,6 +2,8 @@ package com.study.community.common;
 
 import com.study.community.category.CategoryNotFoundException;
 import com.study.community.category.DuplicateCategoryNameException;
+import com.study.community.comment.CommentAccessDeniedException;
+import com.study.community.comment.CommentNotFoundException;
 import com.study.community.member.DuplicateEmailException;
 import com.study.community.member.MemberNotFoundException;
 import com.study.community.post.PostAccessDeniedException;
@@ -66,6 +68,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PostAccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handlePostAccessDenied(PostAccessDeniedException e) {
+        ErrorResponse response = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCommentNotFound(CommentNotFoundException e) {
+        ErrorResponse response = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(CommentAccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleCommentAccessDenied(CommentAccessDeniedException e) {
         ErrorResponse response = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
